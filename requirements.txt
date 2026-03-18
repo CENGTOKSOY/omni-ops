@@ -1,0 +1,5 @@
+boto3>=1.28.0          # AWS servisleri (S3, SQS, DynamoDB) ile iletişim
+flask>=2.3.0           # Order-API için hafif web framework
+gunicorn>=21.2.0       # Production-grade WSGI server
+prometheus_client>=0.17.0 # Observability metrikleri için
+python-dotenv>=1.0.0    # .env dosyası yönetimi
