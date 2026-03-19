@@ -1,23 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-api
+  name: invoice-worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-api
+      app: invoice-worker
   template:
     metadata:
       labels:
-        app: order-api
+        app: invoice-worker
     spec:
       containers:
-      - name: order-api
-        image: omni-ops-order-api:v1
+      - name: invoice-worker
+        image: omni-ops-invoice-worker:v1
         imagePullPolicy: Never
-        ports:
-        - containerPort: 5001
         env:
         - name: AWS_ENDPOINT_URL
           value: "http://localstack-svc:4566"
