@@ -2,11 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: order-api-service
+  namespace: default
+  labels:
+    app: order-api
 spec:
   selector:
     app: order-api
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 5001
-  type: NodePort
+      port: 80         # Cluster içindeki port
+      targetPort: 5001 # Pod içindeki Flask uygulamasının portu
+      name: http       # <--- KRİTİK SATIR: Prometheus ServiceMonitor bu ismi arıyor!
+  type: ClusterIP

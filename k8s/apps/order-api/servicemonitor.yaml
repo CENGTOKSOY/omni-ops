@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: order-api-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus # Prometheus'un beklediği o 'sihirli' anahtar!
+spec:
+  selector:
+    matchLabels:
+      app: order-api
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
