@@ -2,31 +2,27 @@ name: Omni-Ops CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ] # Sadece main branch'ine push yapınca çalışır
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted # Senin MacBook'unu çağırıyoruz
+    runs-on: self-hosted # Senin MacBook Pro M3 Runner'ın
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and Push Docker Image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          # Docker Hub kullanıcı adını ve repo adını kontrol et
-          tags: ${{ secrets.DOCKER_USERNAME }}/omni-ops-order-api:latest
+        run: |
+          # Buildx yerine standart build kullanarak yetki sorunlarını aşıyoruz
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/omni-ops-order-api:latest -f services/order-api/Dockerfile services/order-api
+          docker push ${{ secrets.DOCKER_USERNAME }}/omni-ops-order-api:latest
 
       - name: Deploy to Minikube
         run: |
-          # Kubernetes deployment'ını güncelle ve yeni imajı çekmesini sağla
+          # Yeni imajı Minikube'a çek ve podu tazele
           kubectl rollout restart deployment order-api
-          echo "Deployment başarıyla güncellendi!"
+          echo "Otomatik dağıtım başarıyla tamamlandı!"
