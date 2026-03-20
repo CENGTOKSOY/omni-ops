@@ -5,10 +5,10 @@ services:
     container_name: omni-ops-localstack
     image: localstack/localstack
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # Servis portları
+      - "0.0.0.0:4566:4566"            # 127.0.0.1 yerine 0.0.0.0 yaptık!
+      - "0.0.0.0:4510-4559:4510-4559"  # Tüm IP'lerden gelen bağlantılara izin ver
     environment:
-      - SERVICES=s3,sqs,dynamodb        # Sadece ihtiyacımız olanları açıyoruz
+      - SERVICES=s3,sqs,dynamodb
       - DEBUG=1
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:

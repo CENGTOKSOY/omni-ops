@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: order-api
-        image: omni-ops-order-api:v1
+        image: omni-ops-order-api:v3
         imagePullPolicy: Never
         ports:
         - containerPort: 5001
